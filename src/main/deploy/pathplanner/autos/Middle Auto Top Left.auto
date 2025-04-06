@@ -1,0 +1,31 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": " Middle Coral Start"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": " Score To Intake Top Left"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Intake To Bottom Left"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": null,
+  "choreoAuto": false
+}

@@ -1,0 +1,163 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "named",
+          "data": {
+            "name": "Pivot Default"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Wall Coral Start"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Right Lineup"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.5
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Elevator Level Three"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.5
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Pivot Outake"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 1.0
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Go To Coral"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 1.0
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Stop Coral"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.5
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Leave Coral"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Elevator Level Default"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Pivot Default"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.5
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Score To Intake Bottom Left"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Go To Intake"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Stop Robot"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Pivot Intake"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Coral In"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Stop Coral"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Pivot Default"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Intake To Bottom Left"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Pivot Default"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": null,
+  "choreoAuto": false
+}

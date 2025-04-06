@@ -1,0 +1,98 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "CoolPath"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Left Lineup"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Elevator Level Three"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Pivot Outake"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 1.0
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Go To Coral"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Stop Robot"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 1.0
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Coral Out"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Stop Coral"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Leave Coral"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "Elevator Level Default"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Pivot Default"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": null,
+  "choreoAuto": false
+}
