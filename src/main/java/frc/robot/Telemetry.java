@@ -17,8 +17,8 @@ import edu.wpi.first.networktables.StructPublisher;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.subsystems.LimelightSubsystem;
 import frc.robot.subsystems.ToolSubsystems;
+import frc.robot.subsystems.Vision.LimelightSubsystem;
 public class Telemetry {
     Field2d field = new Field2d();
     

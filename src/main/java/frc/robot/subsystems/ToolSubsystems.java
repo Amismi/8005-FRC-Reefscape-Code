@@ -46,7 +46,6 @@ public class ToolSubsystems {
     private double elevatorPosition = 0; 
 
     //string to get pivot state
-    String  pivotState = "default";
 
 
     //intiation commands
@@ -90,7 +89,7 @@ public class ToolSubsystems {
         .i(0, ClosedLoopSlot.kSlot1)
         .d(0, ClosedLoopSlot.kSlot1)
         .velocityFF(1.0 / 5767, ClosedLoopSlot.kSlot1)
-        .outputRange(-1, 1, ClosedLoopSlot.kSlot1);
+        .outputRange(-0.3, .3, ClosedLoopSlot.kSlot1);
             
         //creating library that has code to let us use the encoder as a position setter, motion max for sparkmax
         m_motmag.Slot = 0;
@@ -149,7 +148,7 @@ public class ToolSubsystems {
         motor.set(-.75);
     }
     
-    //function to manually stop motor, for resests during game and stuff
+    //function to manually stop motor, for resets during game and stuff
     public void StopMotor(SparkMax motor)
     {
         motor.set(0.0);
@@ -236,73 +235,20 @@ public class ToolSubsystems {
      // Funciton to set pivot position to orgin/ 0
      public void PivotDefault()
      {
-         if(pivotState == "default")
-         {
- 
-         }
- 
-         if(pivotState == "intake")
-         {
-         pivotSparkPID.setReference(-1, ControlType.kPosition, ClosedLoopSlot.kSlot0);
-         Timer.delay(.1);
-         pivotSparkPID.setReference(0 , ControlType.kPosition, ClosedLoopSlot.kSlot0);
-         }
- 
-         if(pivotState == "outake")
-         {
-             pivotSparkPID.setReference(-6 , ControlType.kPosition, ClosedLoopSlot.kSlot0);
-             Timer.delay(.2);
-             pivotSparkPID.setReference(-4.5 , ControlType.kPosition, ClosedLoopSlot.kSlot0);
-             Timer.delay(.2);
-             pivotSparkPID.setReference(-3.25 , ControlType.kPosition, ClosedLoopSlot.kSlot0);
-             Timer.delay(.2);
-             pivotSparkPID.setReference(-2 , ControlType.kPosition, ClosedLoopSlot.kSlot0);
-             Timer.delay(.2);
-             pivotSparkPID.setReference(0 , ControlType.kPosition, ClosedLoopSlot.kSlot0);
-         }
-         pivotState = "default";
+        pivotSparkPID.setReference(0 , ControlType.kPosition, ClosedLoopSlot.kSlot0);  
          
      }
          
      //function sets the pivot to the outtake position, taking a break in between positions to not fling out the coral
      public void PivotOutTake()
      {   
-         if(pivotState == "default") //path to take if its starting in default
-         {
-         pivotSparkPID.setReference(0 , ControlType.kPosition, ClosedLoopSlot.kSlot0);
-         Timer.delay(.2);
-         pivotSparkPID.setReference(-2 , ControlType.kPosition, ClosedLoopSlot.kSlot0);
-         Timer.delay(.2);
-         pivotSparkPID.setReference(-3.25 , ControlType.kPosition, ClosedLoopSlot.kSlot0);
-         Timer.delay(.2);
-         pivotSparkPID.setReference(-4.5 , ControlType.kPosition, ClosedLoopSlot.kSlot0);
-         Timer.delay(.2);
-         pivotSparkPID.setReference(-6 , ControlType.kPosition, ClosedLoopSlot.kSlot0);
-         } 
- 
-         if(pivotState == "intake") // path to take if it starts in intake
-         {
-          pivotSparkPID.setReference(-2 , ControlType.kPosition, ClosedLoopSlot.kSlot0);
-         Timer.delay(.2);
-         pivotSparkPID.setReference(-3.25 , ControlType.kPosition, ClosedLoopSlot.kSlot0);
-         Timer.delay(.2);
-         pivotSparkPID.setReference(-4.5 , ControlType.kPosition, ClosedLoopSlot.kSlot0);
-         Timer.delay(.2);
-         pivotSparkPID.setReference(-6 , ControlType.kPosition, ClosedLoopSlot.kSlot0);
-         }
- 
-         if(pivotState == "outake") // nothing if its already in outake.
-         {
- 
-         }
-         pivotState = "outake"; //sets current state to outake
+        pivotSparkPID.setReference(-6 , ControlType.kPosition, ClosedLoopSlot.kSlot0);
      }
  
      //position to intake the coral
      public void PivotIntake()
      {
          pivotSparkPID.setReference(-1.2 , ControlType.kPosition, ClosedLoopSlot.kSlot0);
-         pivotState = "intake"; // dont need states for the intake state
      }
 
     

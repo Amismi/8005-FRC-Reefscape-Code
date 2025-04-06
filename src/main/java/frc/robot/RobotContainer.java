@@ -30,8 +30,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.subsystems.ToolSubsystems;
-import frc.robot.subsystems.LimelightSubsystem;
-
+import frc.robot.subsystems.Vision.LimelightSubsystem;
 import frc.robot.generated.TunerConstants;
 
 import frc.robot.subsystems.CommandSwerveDrivetrain;
@@ -103,7 +102,7 @@ public class RobotContainer {
 
         //NamedCommands.registerCommand("Intake Coral", new InstantCommand(()-> m_ToolSubsystems.IntakeCoral()));
         NamedCommands.registerCommand("Coral Out",new RunCommand(()-> m_ToolSubsystems.MoveMotorForwards(coral)).withTimeout(0.5));        
-        NamedCommands.registerCommand("Coral In",new RunCommand(()-> m_ToolSubsystems.MoveMotorBackwards(coral)).withTimeout(3));
+        NamedCommands.registerCommand("Coral In",new RunCommand(()-> m_ToolSubsystems.MoveMotorBackwards(coral)).withTimeout(1.5));
         NamedCommands.registerCommand("Pivot Default", new InstantCommand(()-> m_ToolSubsystems.PivotDefault()));
         NamedCommands.registerCommand("Pivot Intake", new InstantCommand(()-> m_ToolSubsystems.PivotIntake()));
         NamedCommands.registerCommand("Pivot Outake", new InstantCommand(()-> m_ToolSubsystems.PivotOutTake()));
@@ -168,6 +167,23 @@ public class RobotContainer {
             )
             .withTimeout(.01)
         );
+
+        NamedCommands.registerCommand("Go To Intake", drivetrain.applyRequest(() ->
+        robotCentricDrive
+            .withVelocityX(MaxSpeed * -autoLineUpSpeed)
+            .withVelocityY(LimelightHelpers.getTX(Constants.limelightTwoName) * -limelightMaxSpeed)
+            .withRotationalRate(m_LimelightSubsystem.angLock() * .25) // align rz here
+        )
+        .withTimeout(1) // may have to change line up speed and timing
+    );
+        NamedCommands.registerCommand("Leave Intake", drivetrain.applyRequest(() ->
+        robotCentricDrive
+            .withVelocityX(MaxSpeed * autoLineUpSpeed)
+            .withVelocityY(LimelightHelpers.getTX(Constants.limelightTwoName) * -limelightMaxSpeed)
+            .withRotationalRate(m_LimelightSubsystem.angLock() * .25) // align rz here
+        )
+        .withTimeout(0.8) // may have to change line up speed and timing
+    );
 
         //sequential commands to simplify things, use named commands to make even simpler
         //just build in pathplanner then when it works just convert to code
