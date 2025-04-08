@@ -28,12 +28,7 @@ public class Commands {
     double elevatorLevel = 0;
 
         public final SwerveRequest.RobotCentric robotCentricDrive = new SwerveRequest.RobotCentric()
-        //.withDeadband(MaxSpeed *0.01)
-        .withDriveRequestType(DriveRequestType.OpenLoopVoltage); //open loop control for motors
-        //motors don't adjust based on output or self correct in open loop, only adjust based on controller inputs
-        //realistically during teleop, it should be open loop otherwise it could be much harder to drive with a lot of feedback
-        //but in auto it should be closed looped to allow for robot to correct where it is based on pid controllers given by the 
-        //ppholonomic controller class so that it can be a more accurate self adjusting auto
+            .withDriveRequestType(DriveRequestType.OpenLoopVoltage); 
 
     public Command ElevatorLevel(String Level)
     {
@@ -90,9 +85,10 @@ public class Commands {
 
     public Command ResetRobotParts = new RunCommand(() -> toolSubsystems.ResetRobotParts());
 
-    public Command AlignDrivetrain(CommandSwerveDrivetrain drivetrain, int Pipeline, double RightSpeed, double ForwardSpeed)
+    public Command AlignDrivetrain(CommandSwerveDrivetrain drivetrain, int Pipeline, double RightSpeed, double ForwardSpeed, boolean useAnglock)
     {
         String limelight;
+        double anglock;
 
         if(Pipeline == 2 || Pipeline == 3)
         {
@@ -100,6 +96,12 @@ public class Commands {
         } else {
             limelight = Constants.limeLightOneName;
         }
+
+        if(useAnglock)
+        {
+            anglock = limeligh
+        }
+
         return new SequentialCommandGroup(
             new InstantCommand(() -> LimelightHelpers.setPipelineIndex(limelight, Pipeline)),
             drivetrain.applyRequest(() ->
@@ -123,7 +125,7 @@ public class Commands {
 
     public Command StopMotor(SparkMax max)
     {
-        max.stopMotor();
+        return new RunCommand(() -> max.stopMotor());
     }
     
     public void RegisterNamedCommands(CommandSwerveDrivetrain drivetrain)
@@ -151,7 +153,7 @@ public class Commands {
         
         //Named commands that take over drive train for a certain amount of time to allow for aligning with apriltags
         
-        NamedCommands.registerCommand("Left Lineup", AlignDrivetrain(drivetrain, 1, limelightMaxSpeed, elevatorLevel))
+        NamedCommands.registerCommand("Left Lineup", AlignDrivetrain(drivetrain, 1, limelightMaxSpeed, 0));
 
         NamedCommands.registerCommand("Right Lineup", new SequentialCommandGroup(
             new InstantCommand(() ->  LimelightHelpers.setPipelineIndex(Constants.limeLightOneName, 0)),

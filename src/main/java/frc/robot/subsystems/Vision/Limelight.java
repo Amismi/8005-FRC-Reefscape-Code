@@ -35,6 +35,22 @@ public class Limelight extends LimelightSubsystem{
         return LimelightHelpers.pose3dToArray(LimelightHelpers.getTargetPose3d_CameraSpace(limelightName))[4];
     }
 
+    public double txWithDeadband()
+    {
+        return applyDeadband(0.05, getTX());
+    }
+
+    public double tyWithDeadband()
+    {
+        return applyDeadband(.05, getTY());
+    }
+
+    public double AngleDeadband()
+    {
+        return applyDeadband(.05, AngleDeadband());
+    }
+
+
     
     
 }

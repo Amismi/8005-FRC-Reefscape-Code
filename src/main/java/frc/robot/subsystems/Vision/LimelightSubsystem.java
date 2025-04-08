@@ -305,6 +305,16 @@ public class LimelightSubsystem implements Subsystem {
         }
     }
 
+    protected double applyDeadband(double deadbandValue, double alignValue)
+    {
+        if(Math.abs(alignValue) < deadbandValue)
+        {
+            return 0;
+        } else {
+            return alignValue;
+        }
+    }
+
     @Override
     public void periodic() {
         // This method will be called once per scheduler run
