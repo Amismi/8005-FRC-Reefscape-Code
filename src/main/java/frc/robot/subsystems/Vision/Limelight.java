@@ -33,7 +33,6 @@ public class Limelight extends LimelightSubsystem{
     public double AngleComparedToTag()
     {
         return LimelightHelpers.pose3dToArray(LimelightHelpers.getTargetPose3d_CameraSpace(limelightName))[4];
-        //idk how to get this gotta look at the other thing
     }
 
     

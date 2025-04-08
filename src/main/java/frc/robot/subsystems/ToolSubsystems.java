@@ -68,9 +68,9 @@ public class ToolSubsystems {
         pids.kD = 0.1;  
         
         //motion magic for elevator encoder pids
-        motionMagicConfigs.MotionMagicCruiseVelocity = 90;
-        motionMagicConfigs.MotionMagicAcceleration = 180;
-        motionMagicConfigs.MotionMagicJerk = 1600;
+        motionMagicConfigs.MotionMagicCruiseVelocity = 150;
+        motionMagicConfigs.MotionMagicAcceleration = 225;
+        motionMagicConfigs.MotionMagicJerk = 2750;
         
         //from here on, this is all sparkmax initialization for encoder position setting
         //getting closed loop control aka encoder 

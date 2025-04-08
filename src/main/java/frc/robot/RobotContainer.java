@@ -49,6 +49,8 @@ public class RobotContainer {
     //subsystem intialization
     public static ToolSubsystems m_ToolSubsystems = new ToolSubsystems();
     public static LimelightSubsystem m_LimelightSubsystem = new LimelightSubsystem();
+    public static Commands CommandSystem = new Commands();
+    
     
     //speed variables
     public static double MaxBaseSpeed = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
