@@ -2,9 +2,10 @@ package frc.robot.subsystems.Vision;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.networktables.NetworkTable;
+import frc.robot.Constants;
 import frc.robot.LimelightHelpers;
 
-public class Limelight {
+public class Limelight extends LimelightSubsystem{
     String limelightName;
 
     public Limelight(String name)
@@ -31,8 +32,10 @@ public class Limelight {
 
     public double AngleComparedToTag()
     {
-        return 0;
+        return LimelightHelpers.pose3dToArray(LimelightHelpers.getTargetPose3d_CameraSpace(limelightName))[4];
         //idk how to get this gotta look at the other thing
     }
+
+    
     
 }
