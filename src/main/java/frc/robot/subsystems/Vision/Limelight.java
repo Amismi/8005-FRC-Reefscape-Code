@@ -1,5 +1,6 @@
 package frc.robot.subsystems.Vision;
 
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.networktables.NetworkTable;
 import frc.robot.LimelightHelpers;
 
@@ -23,11 +24,15 @@ public class Limelight {
         return table.getEntry("tx").getDouble(0);
     }
     
+    public boolean getTV()
+    {
+        return LimelightHelpers.getTV(limelightName); 
+    }
+
     public double AngleComparedToTag()
     {
         return 0;
         //idk how to get this gotta look at the other thing
     }
-    
     
 }

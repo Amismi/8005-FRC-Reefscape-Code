@@ -208,6 +208,21 @@ public class ToolSubsystems {
         MoveElevatorMotor(0);
     }
 
+    public void MoveLift()
+    {
+        lift.set(1);
+    }
+
+    public void StopLift()
+    {
+        lift.set(0);
+    }
+
+    public void MoveLiftBackwards()
+    {
+        lift.set(-1);
+    }
+
 
     public void ResetElevatorEncoder()
     {
@@ -244,12 +259,13 @@ public class ToolSubsystems {
      {   
         pivotSparkPID.setReference(-6 , ControlType.kPosition, ClosedLoopSlot.kSlot0);
      }
- 
+
      //position to intake the coral
      public void PivotIntake()
      {
          pivotSparkPID.setReference(-1.2 , ControlType.kPosition, ClosedLoopSlot.kSlot0);
      }
+
 
     
     public void FlipMaxSpeed()

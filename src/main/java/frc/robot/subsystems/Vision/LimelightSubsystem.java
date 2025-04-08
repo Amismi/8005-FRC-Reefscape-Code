@@ -69,6 +69,8 @@ public class LimelightSubsystem implements Subsystem {
 
     @SuppressWarnings("unchecked")
 
+    
+
     //this should be called all the time, and should also be tuned for the modules 
     public void updatePose()
     {
@@ -204,7 +206,7 @@ public class LimelightSubsystem implements Subsystem {
 
     int[] reefTags = {6, 7, 8, 9, 10, 11, 17, 18, 19, 20, 21, 22};
      int[] intakeTags = {1, 2, 12, 13};
-    public boolean LookingAtReef;
+    public boolean LookingAtReef; 
     public void IsLookingAtReef()
     {
         for(int i = 0; i <= reefTags.length; i++)
@@ -223,6 +225,7 @@ public class LimelightSubsystem implements Subsystem {
             }
         }        
     }
+    
 
     //changes pipelines / offsets based on where the limelight is
     public int CurPipeline(boolean rightSide)
@@ -260,7 +263,6 @@ public class LimelightSubsystem implements Subsystem {
         // if (angLock < 0){
         //     angLock = angLock * -1;
         // }
-
         if (offset < 2 && offset > -2) {
             angLock = 0;
         }
@@ -288,6 +290,25 @@ public class LimelightSubsystem implements Subsystem {
             offset = 360 + offset;
         }
         return offset;
+    }
+
+    public Limelight CurrentLimelight(Limelight limeOne, Limelight limeTwo)
+    {
+        if(limeOne.getTV())
+        {
+            return limeOne;
+        }  else if(limeTwo.getTV())
+        {
+            return limeTwo;
+        } else {
+            return limeOne;
+        }
+    }
+
+    @Override
+    public void periodic() {
+        // This method will be called once per scheduler run
+        IsLookingAtReef();
     }
 
 
