@@ -10,6 +10,7 @@ import com.pathplanner.lib.auto.NamedCommands;
 import com.revrobotics.spark.SparkMax;
 
 import edu.wpi.first.units.measure.Time;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.motorcontrol.Spark;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -78,6 +79,11 @@ public class Commands {
     public Command MoveLift(boolean forward)
     {
         return new RunCommand(() -> toolSubsystems.MoveLift());
+    }
+
+    public Command StopAlgea()
+    {
+        return new RunCommand(() -> toolSubsystems.StopAlgae());
     }
 
     public Command StopLift = new RunCommand(() -> toolSubsystems.StopLift());
@@ -167,6 +173,19 @@ public class Commands {
     public Command StopMotor(SparkMax max)
     {
         return new RunCommand(() -> max.stopMotor());
+    }
+
+    public Command DriveDrivetrain(CommandSwerveDrivetrain drivetrain, double ForwardSpeed, double RightSpeed, double AngularSpeed)
+    {
+        return new SequentialCommandGroup(
+            new InstantCommand(() -> LimelightHelpers.setPipelineIndex(limelight, usingPipeline)),
+            drivetrain.applyRequest(() ->
+                robotCentricDrive
+                    .withVelocityX(ForwardSpeed)
+                    .withVelocityY(-RightSpeed)
+                    .withRotationalRate(AngularSpeed)
+                    )
+            );
     }
     
     public void RegisterNamedCommands(CommandSwerveDrivetrain drivetrain)
