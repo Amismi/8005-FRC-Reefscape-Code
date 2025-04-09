@@ -6,7 +6,7 @@ import frc.robot.Constants;
 import frc.robot.LimelightHelpers;
 
 public class Limelight extends LimelightSubsystem{
-    String limelightName;
+    public String limelightName;
 
     public Limelight(String name)
     {
@@ -35,12 +35,12 @@ public class Limelight extends LimelightSubsystem{
         return LimelightHelpers.pose3dToArray(LimelightHelpers.getTargetPose3d_CameraSpace(limelightName))[4];
     }
 
-    public double txWithDeadband()
+    public double TXWithDeadband()
     {
         return applyDeadband(0.05, getTX());
     }
 
-    public double tyWithDeadband()
+    public double TYWithDeadband()
     {
         return applyDeadband(.05, getTY());
     }
@@ -49,6 +49,12 @@ public class Limelight extends LimelightSubsystem{
     {
         return applyDeadband(.05, AngleDeadband());
     }
+
+    public void SwitchLimelightPipeline(int pipeline)
+    {
+        LimelightHelpers.setPipelineIndex(limelightName, pipeline);
+    }
+
 
 
     

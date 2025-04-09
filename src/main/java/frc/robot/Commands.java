@@ -1,5 +1,9 @@
 package frc.robot;
 
+import static edu.wpi.first.units.Units.*;
+
+import java.nio.channels.Pipe;
+
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 import com.pathplanner.lib.auto.NamedCommands;
@@ -12,6 +16,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
+import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.ToolSubsystems;
 import frc.robot.subsystems.Vision.Limelight;
@@ -24,11 +29,21 @@ public class Commands {
     LimelightSubsystem limelightSubsystem = new LimelightSubsystem();
     ToolSubsystems toolSubsystems = new ToolSubsystems();
 
+    double MaxBaseSpeed = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond);
+    double autoPercentSpeed = .1;
+    double autoLineUpSpeed = MaxBaseSpeed * autoPercentSpeed;
+    int usingPipeline;
+
+    String limelight;
+    double anglock;
+    
+ 
+
     private double limelightMaxSpeed = 0.007;
     double elevatorLevel = 0;
 
-        public final SwerveRequest.RobotCentric robotCentricDrive = new SwerveRequest.RobotCentric()
-            .withDriveRequestType(DriveRequestType.OpenLoopVoltage); 
+    public final SwerveRequest.RobotCentric robotCentricDrive = new SwerveRequest.RobotCentric()
+        .withDriveRequestType(DriveRequestType.OpenLoopVoltage); 
 
     public Command ElevatorLevel(String Level)
     {
@@ -85,30 +100,56 @@ public class Commands {
 
     public Command ResetRobotParts = new RunCommand(() -> toolSubsystems.ResetRobotParts());
 
-    public Command AlignDrivetrain(CommandSwerveDrivetrain drivetrain, int Pipeline, double RightSpeed, double ForwardSpeed, boolean useAnglock)
+    public Command AlignDrivetrain(CommandSwerveDrivetrain drivetrain, Integer Pipeline, double RightSpeed, double ForwardSpeed, boolean useAnglock, Boolean LeftAlign)
     {
-        String limelight;
-        double anglock;
-
-        if(Pipeline == 2 || Pipeline == 3)
+        if(Pipeline == null)
+        {
+            usingPipeline = (int)LimelightHelpers.getCurrentPipelineIndex(limelight);
+        }
+        else if(Pipeline == 2 || Pipeline == 3)
         {
             limelight = Constants.limelightTwoName;
-        } else {
+            if(LeftAlign == true)
+            {
+                usingPipeline = 2; // may need to be adjusted based on what pipeline is which
+            } else if(LeftAlign == false)
+            {
+                usingPipeline = 3;
+            }
+        }
+        else if(Pipeline == 0 || Pipeline == 1) 
+        {
             limelight = Constants.limeLightOneName;
+            if(LeftAlign == true)
+            {
+                usingPipeline = 0; // may need to be adjusted based on what pipeline is which
+            } else if(LeftAlign == false)
+            {
+                usingPipeline = 1;
+            }
         }
 
         if(useAnglock)
         {
-            anglock = limeligh
+            if(limelight == Constants.limeLightOneName && useAnglock == true)
+            {
+                anglock = bottomLimelight.AngleDeadband();
+            } else if(limelight == Constants.limelightTwoName && useAnglock == true){
+                anglock = topLimelight.AngleDeadband();
+            } else
+            {
+                anglock = 0;
+            }
         }
+    
 
         return new SequentialCommandGroup(
-            new InstantCommand(() -> LimelightHelpers.setPipelineIndex(limelight, Pipeline)),
+            new InstantCommand(() -> LimelightHelpers.setPipelineIndex(limelight, usingPipeline)),
             drivetrain.applyRequest(() ->
                 robotCentricDrive
                     .withVelocityX(ForwardSpeed)
                     .withVelocityY(LimelightHelpers.getTX(limelight) * -RightSpeed)
-                    .withRotationalRate(limelightSubsystem.CurrentLimelight(topLimelight, bottomLimelight).angLock() * 0.25)
+                    .withRotationalRate(anglock * 0.25)
                     )
             );
     }
@@ -138,7 +179,7 @@ public class Commands {
         NamedCommands.registerCommand("Elevator Algae Bottom", ElevatorLevel("Algae 1"));
         NamedCommands.registerCommand("Elevator Algae Top", ElevatorLevel("Algae 2"));
 
-        //Extremeties Auto Commands
+        //Extremities Auto Commands
         NamedCommands.registerCommand("Coral Out", MoveMotor(toolSubsystems.coral, true));        
         NamedCommands.registerCommand("Coral In", MoveMotor(toolSubsystems.coral, true));
         NamedCommands.registerCommand("Pivot Default", MovePivot("Default"));
@@ -153,63 +194,29 @@ public class Commands {
         
         //Named commands that take over drive train for a certain amount of time to allow for aligning with apriltags
         
-        NamedCommands.registerCommand("Left Lineup", AlignDrivetrain(drivetrain, 1, limelightMaxSpeed, 0));
+        NamedCommands.registerCommand("Left Lineup", AlignDrivetrain(drivetrain, 1, limelightMaxSpeed, 0, true, true)
+            .withTimeout(2.5));
 
-        NamedCommands.registerCommand("Right Lineup", new SequentialCommandGroup(
-            new InstantCommand(() ->  LimelightHelpers.setPipelineIndex(Constants.limeLightOneName, 0)),
-            drivetrain.applyRequest(() ->
-                robotCentricDrive
-                    .withVelocityY(LimelightHelpers.getTX(Constants.limeLightOneName) * -limelightMaxSpeed)
-                    .withRotationalRate(m_LimelightSubsystem.angLock() * 0.25)
-            )
-        )
-        .withTimeout(2.5)
-        ); //this one may have to be switched if the pipeline indexes are wrong
+        NamedCommands.registerCommand("Right Lineup", AlignDrivetrain(drivetrain, 0, limelightMaxSpeed, 0, true, false)
+            .withTimeout(2.5)); //this one may have to be switched if the pipeline indexes are wrong
         //have to switch index first otherwise the robot may track wrong and make the error way too high
         
-        NamedCommands.registerCommand("Go To Coral", drivetrain.applyRequest(() ->
-            robotCentricDrive
-                .withVelocityX(MaxSpeed * -autoLineUpSpeed)
-                .withVelocityY(LimelightHelpers.getTX(Constants.limeLightOneName) * -limelightMaxSpeed)
-                .withRotationalRate(m_LimelightSubsystem.angLock() * .25)
-            )
-            .withTimeout(0.2)
-        );
+        NamedCommands.registerCommand("Go To Coral", AlignDrivetrain(drivetrain, null, limelightMaxSpeed, autoLineUpSpeed, true, null)
+            .withTimeout(.3));
 
-        NamedCommands.registerCommand("Leave Coral", drivetrain.applyRequest(() ->
-            robotCentricDrive
-                .withVelocityX(MaxSpeed * autoLineUpSpeed)
-                .withVelocityY(LimelightHelpers.getTX(Constants.limeLightOneName) * -limelightMaxSpeed)
-                .withRotationalRate(m_LimelightSubsystem.angLock() * .25)
-            )
-            .withTimeout(0.3)
-        );
+        NamedCommands.registerCommand("Leave Coral", AlignDrivetrain(drivetrain, null, limelightMaxSpeed, -autoLineUpSpeed, true, null)
+        .withTimeout(0.3));
         //named command to stop robot because otherwise the drivetrain just drives with its last request
+
         NamedCommands.registerCommand("Stop Robot", drivetrain.applyRequest(() ->
             robotCentricDrive
                 .withVelocityX(0)
                 .withVelocityY(0)
                 .withRotationalRate(0)
             )
-            .withTimeout(.01)
-        );
+            .withTimeout(.01) 
+        ); // need this to take control of drivetrain after the align auto commands timeouts otherwise they just keep going
 
-        NamedCommands.registerCommand("Go To Intake", drivetrain.applyRequest(() ->
-        robotCentricDrive
-            .withVelocityX(MaxSpeed * -autoLineUpSpeed)
-            .withVelocityY(LimelightHelpers.getTX(Constants.limelightTwoName) * -limelightMaxSpeed)
-            .withRotationalRate(m_LimelightSubsystem.angLock() * .25) // align rz here
-        )
-        .withTimeout(1) // may have to change line up speed and timing
-    );
-        NamedCommands.registerCommand("Leave Intake", drivetrain.applyRequest(() ->
-        robotCentricDrive
-            .withVelocityX(MaxSpeed * autoLineUpSpeed)
-            .withVelocityY(LimelightHelpers.getTX(Constants.limelightTwoName) * -limelightMaxSpeed)
-            .withRotationalRate(m_LimelightSubsystem.angLock() * .25) // align rz here
-        )
-        .withTimeout(0.8) // may have to change line up speed and timing
-    );
 
         //sequential commands to simplify things, use named commands to make even simpler
         //just build in pathplanner then when it works just convert to code

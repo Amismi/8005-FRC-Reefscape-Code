@@ -34,10 +34,10 @@ public class LimelightSubsystem implements Subsystem {
 
 
     //getting kinematics for the robot
-    public Kinematics robotKinematics = RobotContainer.drivetrain.getKinematics();
+    public static Kinematics robotKinematics = RobotContainer.drivetrain.getKinematics();
 
     //variable to Estimate the pose, taking in swerve module positions, gyro, poses and many other things
-    public final SwerveDrivePoseEstimator estimatePose = new SwerveDrivePoseEstimator((SwerveDriveKinematics) robotKinematics, 
+    public static final SwerveDrivePoseEstimator estimatePose = new SwerveDrivePoseEstimator((SwerveDriveKinematics) robotKinematics, 
         RobotContainer.drivetrain.getPigeon2().getRotation2d(), 
         new SwerveModulePosition[] {
             RobotContainer.drivetrain.getModule(0).getPosition(true),
