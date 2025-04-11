@@ -35,6 +35,7 @@ import frc.robot.subsystems.CommandSwerveDrivetrain;
 public class RobotContainer {
 
     //motor intialization
+
     public final static TalonFX lift = new TalonFX(Constants.liftMotorIdNum);
     public final static SparkMax algaeright = new SparkMax(Constants.algae1IdNum, MotorType.kBrushless);
     public final static SparkMax algaeleft = new SparkMax(Constants.algae2IdNum, MotorType.kBrushless);
@@ -43,9 +44,12 @@ public class RobotContainer {
     public final static SparkMax pivot = new SparkMax(Constants.pivotIdNum, MotorType.kBrushless);
 
     //subsystem intialization
+    
     public static ToolSubsystems m_ToolSubsystems = new ToolSubsystems();
     public static LimelightSubsystem m_LimelightSubsystem = new LimelightSubsystem();
-    public static Commands CommandSystem = new Commands();
+    public static Commands CommandSystem = new Commands(); //this is the most helpful system that holds all commands aka 
+    //things the robot can do
+    private final Telemetry logger = new Telemetry(MaxSpeed);
     
     
     //speed variables
@@ -55,16 +59,15 @@ public class RobotContainer {
     private double speedAngleVar = .70; //same thing as last but for rotating speed
     public static double MaxSpeed = MaxBaseSpeed; //variable to switch to negative if on red side and controls are flipped
     private double limelightMaxSpeed = 0.007; //percentage of speed drivetrain goes aligning, low so the robot doesn't oscilate since tx can get high
-    public final static double baseautoLineUpSpeed = 0.1; //max speed to go when the robot goes forward during aligning in auto
+    public static double baseautoLineUpSpeed = 0.1; //max speed to go when the robot goes forward during aligning in auto
     public static double autoLineUpSpeed = baseautoLineUpSpeed; //used to flip speed to negative if on red side and sides are flipped
-    private double joystickForwardSpeed = 0;
+    private double joystickForwardSpeed = 0; //variables that 
     private double joystickStrafeSpeed = 0;
     private double joystickAngleSpeed = 0;
     
-    //object to send values to the dashboard from telemetry file
-    private final Telemetry logger = new Telemetry(MaxSpeed);
 
     //intializing the controllers to use
+
     private final CommandXboxController joystick = new CommandXboxController(0);
     private final CommandXboxController joystick2 = new CommandXboxController(1);
     
@@ -78,11 +81,8 @@ public class RobotContainer {
     //no deadband on robot centric so that it doesn't screw with limelight align auto
     public final SwerveRequest.RobotCentric robotCentricDrive = new SwerveRequest.RobotCentric()
         //.withDeadband(MaxSpeed *0.01)
-        .withDriveRequestType(DriveRequestType.OpenLoopVoltage); //open loop control for motors
-        //motors don't adjust based on output or self correct in open loop, only adjust based on controller inputs
-        //realistically during teleop, it should be open loop otherwise it could be much harder to drive with a lot of feedback
-        //but in auto it should be closed looped to allow for robot to correct where it is based on pid controllers given by the 
-        //ppholonomic controller class so that it can be a more accurate self adjusting auto
+        .withDriveRequestType(DriveRequestType.OpenLoopVoltage); //open loop control for motors aka not using 
+        //output data to change the input. PIDS do do this so this isn't pid based.
 
     //creating drivetrain object
     public final static CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
@@ -93,9 +93,14 @@ public class RobotContainer {
 
     public RobotContainer() {
 
+        //creating the auto commands
         CommandSystem.RegisterNamedCommands(drivetrain);
+        //building the pathplanner that the robot ends up using along with named commands
         autoChooser = AutoBuilder.buildAutoChooser(); 
+        //pushing the auto commands to the dashboard
         SmartDashboard.putData("AutoMode", autoChooser);
+        //doing all the bindings and saying what happens when we press a button
+        //this function should run every frame realistically.
         configureBindings();
     }
 
@@ -105,6 +110,7 @@ public class RobotContainer {
         // Note that X is defined as forward according to WPILib convention,
         // and Y is defined as to the left according to WPILib convention.
         
+        //may have to change this if it doesn't work periodically
         joystickForwardSpeed = -joystick.getLeftY() * MaxSpeed * -speedVar;
         joystickStrafeSpeed = -joystick.getLeftX() * MaxSpeed * -speedVar;
         joystickAngleSpeed = -joystick.getRightX() * MaxAngularRate * speedAngleVar;
@@ -115,7 +121,12 @@ public class RobotContainer {
         
         drivetrain.setDefaultCommand(
             // Drivetrain will execute this command periodically
-            CommandSystem.DriveDrivetrain(drivetrain, joystickForwardSpeed, joystickStrafeSpeed, joystickAngleSpeed)
+            CommandSystem.DriveDrivetrain(
+                drivetrain, 
+                joystickForwardSpeed, 
+                joystickStrafeSpeed, 
+                joystickAngleSpeed
+            )
         );
     
                 

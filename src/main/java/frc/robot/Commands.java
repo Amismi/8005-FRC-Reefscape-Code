@@ -190,6 +190,12 @@ public class Commands {
     
     public void RegisterNamedCommands(CommandSwerveDrivetrain drivetrain)
     {
+        //Void that creates all the named commands for auto mode in the START of the constructor for robot container
+        //To use these, just type the names of the commands into pathplanner in the named command option in the auto builder
+        //and it should do it.
+
+        //no comments on much of these cause just reading the strings will make you understand what its doing
+
         //Elevator Auto Commands
         NamedCommands.registerCommand("Elevator Level Default", ElevatorLevel("Default"));
         NamedCommands.registerCommand("Elevator Level One", ElevatorLevel("Level 1"));
@@ -276,6 +282,7 @@ public class Commands {
             NamedCommands.getCommand("Reset Robot Parts")
         );
 
+        //commands that used to make making the robot score simpler
         NamedCommands.registerCommand("Score Right", ScoreRight);
         NamedCommands.registerCommand("Score Left", ScoreLeft);
     }

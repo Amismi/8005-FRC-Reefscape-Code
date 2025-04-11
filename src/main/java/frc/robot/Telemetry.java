@@ -127,12 +127,9 @@ public class Telemetry {
         SmartDashboard.putNumber("current Id", LimelightHelpers.getFiducialID(Constants.limeLightOneName));
         SmartDashboard.putNumber("last tag", m_LimelightSubsystem.lastTag);
         SmartDashboard.putBoolean("changing", m_LimelightSubsystem.isChanging);
-        SmartDashboard.putNumber("target angle", m_LimelightSubsystem.GetIdRotation().getDegrees());
         SmartDashboard.putNumber("cur Rotation", RobotContainer.drivetrain.getState().Pose.getRotation().getDegrees());
-        double targetDeg = m_LimelightSubsystem.GetIdRotation().getDegrees();
+
         double curAngle = RobotContainer.drivetrain.getState().Pose.getRotation().getDegrees();
-        double offset = m_LimelightSubsystem.CalculateOffset(targetDeg, curAngle);
-        SmartDashboard.putNumber("offset", offset);
         field.setRobotPose(RobotContainer.drivetrain.getState().Pose);
         SmartDashboard.putData("Field", field);
         //SmartDashboard.putString("curLimelight", LimelightSubsystem.curLimelight());

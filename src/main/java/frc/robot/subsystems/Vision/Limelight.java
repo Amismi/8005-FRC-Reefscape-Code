@@ -6,6 +6,8 @@ import frc.robot.Constants;
 import frc.robot.LimelightHelpers;
 
 public class Limelight extends LimelightSubsystem{
+    //class to get raw data from the limelight like tx and ty
+
     public String limelightName;
 
     public Limelight(String name)
@@ -22,7 +24,7 @@ public class Limelight extends LimelightSubsystem{
 
     public double getTY()
     {
-        return table.getEntry("tx").getDouble(0);
+        return table.getEntry("ty").getDouble(0);
     }
     
     public boolean getTV()
@@ -54,9 +56,5 @@ public class Limelight extends LimelightSubsystem{
     {
         LimelightHelpers.setPipelineIndex(limelightName, pipeline);
     }
-
-
-
-    
     
 }

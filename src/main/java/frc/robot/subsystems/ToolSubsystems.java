@@ -35,11 +35,10 @@ public class ToolSubsystems {
 
     //setting the SparkMax variables, for motion magic, which allows for position control
     private  SparkMaxConfig config = new SparkMaxConfig();
-    private  SparkClosedLoopController pivotSparkPID; 
+    private  SparkClosedLoopController pivotSparkPID; //pid controller that the sparkmax uses for position control
 
     //Setting the Talon Fx variables and libraries, live velocity voltage, which allows for position control
     private  MotionMagicVoltage m_motmag = new MotionMagicVoltage(0);
-    public VelocityVoltage m_velocity = new VelocityVoltage(0);
     public TalonFXConfiguration talonFxConfigs= new TalonFXConfiguration();
     private MotionMagicConfigs motionMagicConfigs = talonFxConfigs.MotionMagic;
     private Slot0Configs pids =  talonFxConfigs.Slot0;   
@@ -52,7 +51,6 @@ public class ToolSubsystems {
     public void init()
     {
             //setting encoder velocity settings to 0
-            m_velocity.Slot = 0;
             //configuring talon fx motor
             elevator.getConfigurator().apply(talonFxConfigs, 0.50);
     }
@@ -73,7 +71,7 @@ public class ToolSubsystems {
         motionMagicConfigs.MotionMagicJerk = 2750;
         
         //from here on, this is all sparkmax initialization for encoder position setting
-        //getting closed loop control aka encoder 
+        //getting closed loop control aka pid encoder control for pivot.
         pivotSparkPID = pivot.getClosedLoopController();
         config.encoder.positionConversionFactor(1).velocityConversionFactor(1);
         config.closedLoop.feedbackSensor(FeedbackSensor.kPrimaryEncoder)

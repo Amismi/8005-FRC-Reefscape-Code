@@ -145,52 +145,53 @@ public class LimelightSubsystem implements Subsystem {
     }
     
 
-    public Rotation2d GetIdRotation()
-    {
-        //big ass switch statement to get correct rotation
-        switch ((int)lastTag) {
-            case 7:
-                return new Rotation2d(Math.toRadians(0));
+    // public Rotation2d GetIdRotation()
+    // {
+    //     //big ass switch statement to get correct rotation
+    //     switch ((int)lastTag) {
+    //         case 7:
+    //             return new Rotation2d(Math.toRadians(0));
 
-            case 6:
-                return new Rotation2d(Math.toRadians(-60));
+    //         case 6:
+    //             return new Rotation2d(Math.toRadians(-60));
 
-            case 11:
-                return new Rotation2d(Math.toRadians(-120));
+    //         case 11:
+    //             return new Rotation2d(Math.toRadians(-120));
 
-            case 10:
-                return new Rotation2d(Math.toRadians(180));
+    //         case 10:
+    //             return new Rotation2d(Math.toRadians(180));
 
-            case 8:
-                return new Rotation2d(Math.toRadians(60));
+    //         case 8:
+    //             return new Rotation2d(Math.toRadians(60));
 
-            case 9:
-                return new Rotation2d(Math.toRadians(120));
+    //         case 9:
+    //             return new Rotation2d(Math.toRadians(120));
 
-            case 18:
-                return new Rotation2d(Math.toRadians(0));
+    //         case 18:
+    //             return new Rotation2d(Math.toRadians(0));
 
-            case 19:
-                return new Rotation2d(Math.toRadians(-60));
+    //         case 19:
+    //             return new Rotation2d(Math.toRadians(-60));
 
-            case 20: 
-                return new Rotation2d(Math.toRadians(-120));
+    //         case 20: 
+    //             return new Rotation2d(Math.toRadians(-120));
 
-            case 21:
-                return new Rotation2d(Math.toRadians(180));
+    //         case 21:
+    //             return new Rotation2d(Math.toRadians(180));
 
-             case 22:
-                return new Rotation2d(Math.toRadians(120));
+    //          case 22:
+    //             return new Rotation2d(Math.toRadians(120));
 
-            case 17:
-                return new Rotation2d(Math.toRadians(60));
+    //         case 17:
+    //             return new Rotation2d(Math.toRadians(60));
 
-            default:
-                return new Rotation2d(Math.toRadians(0));
+    //         default:
+    //             return new Rotation2d(Math.toRadians(0));
 
-        }
+    //     }
 
-    }
+    // }
+    //this isn't needed for new angle system
 
     PoseEstimate LimelightSide(String side)
     {
@@ -207,24 +208,24 @@ public class LimelightSubsystem implements Subsystem {
     int[] reefTags = {6, 7, 8, 9, 10, 11, 17, 18, 19, 20, 21, 22};
      int[] intakeTags = {1, 2, 12, 13};
     public boolean LookingAtReef; 
-    public void IsLookingAtReef()
-    {
-        for(int i = 0; i <= reefTags.length; i++)
-        {
-            if(trueLastTag == reefTags[i])
-            {
-                LookingAtReef = true;
-            }
-        } 
+    // public void IsLookingAtReef()
+    // {
+    //     for(int i = 0; i <= reefTags.length; i++)
+    //     {
+    //         if(trueLastTag == reefTags[i])
+    //         {
+    //             LookingAtReef = true;
+    //         }
+    //     } 
         
-        for(int i = 0; i<= intakeTags.length; i++)
-        {
-            if(trueLastTag == intakeTags[i])
-            {
-                LookingAtReef = false;
-            }
-        }        
-    }
+    //     for(int i = 0; i<= intakeTags.length; i++)
+    //     {
+    //         if(trueLastTag == intakeTags[i])
+    //         {
+    //             LookingAtReef = false;
+    //         }
+    //     }        
+    // }
     
 
     //changes pipelines / offsets based on where the limelight is
@@ -252,45 +253,49 @@ public class LimelightSubsystem implements Subsystem {
     } //have to get the right pipelines
 
              
-    public double angLock() {
-        double targetAngle = RobotContainer.m_LimelightSubsystem.GetIdRotation().getDegrees();
-        double currentAngle = RobotContainer.drivetrain.getState().Pose.getRotation().getDegrees();
-        double targetDeg = targetAngle;
-        double currentDeg = currentAngle;
-        double offset;
-        offset = CalculateOffset(targetDeg, currentDeg);
-        double angLock = (offset * 3.14/180 * 10);
-        // if (angLock < 0){
-        //     angLock = angLock * -1;
-        // }
-        if (offset < 2 && offset > -2) {
-            angLock = 0;
-        }
-        SmartDashboard.putNumber("offset", offset);
-        return angLock;
-    }
+    // public double angLock() {
+    //     double targetAngle = RobotContainer.m_LimelightSubsystem.GetIdRotation().getDegrees();
+    //     double currentAngle = RobotContainer.drivetrain.getState().Pose.getRotation().getDegrees();
+    //     double targetDeg = targetAngle;
+    //     double currentDeg = currentAngle;
+    //     double offset;
+    //     offset = CalculateOffset(targetDeg, currentDeg);
+    //     double angLock = (offset * 3.14/180 * 10);
+    //     // if (angLock < 0){
+    //     //     angLock = angLock * -1;
+    //     // }
+    //     if (offset < 2 && offset > -2) {
+    //         angLock = 0;
+    //     }
+    //     SmartDashboard.putNumber("offset", offset);
+    //     return angLock;
+    // }
+        //this isn't needed for new angle system
 
-    public double CalculateOffset(double targetAngle, double curAngle)
-    {
+    // public double CalculateOffset(double targetAngle, double curAngle)
+    // {
 
-        double offset = targetAngle - curAngle;
-        if(offset > 360)
-        {
-            offset -=360;
-        }else if(offset < -360)
-        {
-            offset += 360;
-        }
+    //     double offset = targetAngle - curAngle;
+    //     if(offset > 360)
+    //     {
+    //         offset -=360;
+    //     }else if(offset < -360)
+    //     {
+    //         offset += 360;
+    //     }
 
-        if(offset > 180)
-        {
-            offset = offset - 360;
-        } else if(offset < -180)
-        {
-            offset = 360 + offset;
-        }
-        return offset;
-    }
+    //     if(offset > 180)
+    //     {
+    //         offset = offset - 360;
+    //     } else if(offset < -180)
+    //     {
+    //         offset = 360 + offset;
+    //     }
+    //     return offset;
+    // }
+
+        //this isn't needed for new angle system
+
 
     public Limelight CurrentLimelight(Limelight limeOne, Limelight limeTwo)
     {
@@ -315,11 +320,7 @@ public class LimelightSubsystem implements Subsystem {
         }
     }
 
-    @Override
-    public void periodic() {
-        // This method will be called once per scheduler run
-        IsLookingAtReef();
-    }
+    
 
 
 }
