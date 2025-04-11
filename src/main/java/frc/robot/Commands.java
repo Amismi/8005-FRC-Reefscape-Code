@@ -2,16 +2,11 @@ package frc.robot;
 
 import static edu.wpi.first.units.Units.*;
 
-import java.nio.channels.Pipe;
-
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.revrobotics.spark.SparkMax;
 
-import edu.wpi.first.units.measure.Time;
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.motorcontrol.Spark;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
@@ -42,6 +37,10 @@ public class Commands {
 
     private double limelightMaxSpeed = 0.007;
     double elevatorLevel = 0;
+
+    private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
+    .withDeadband(RobotContainer.MaxSpeed * 0.1).withRotationalDeadband(RobotContainer.MaxAngularRate * 0.15) // Add a 15% deadband
+    .withDriveRequestType(DriveRequestType.OpenLoopVoltage); // Use open-loop control for drive motors
 
     public final SwerveRequest.RobotCentric robotCentricDrive = new SwerveRequest.RobotCentric()
         .withDriveRequestType(DriveRequestType.OpenLoopVoltage); 
@@ -152,7 +151,7 @@ public class Commands {
         return new SequentialCommandGroup(
             new InstantCommand(() -> LimelightHelpers.setPipelineIndex(limelight, usingPipeline)),
             drivetrain.applyRequest(() ->
-                robotCentricDrive
+                drive
                     .withVelocityX(ForwardSpeed)
                     .withVelocityY(LimelightHelpers.getTX(limelight) * -RightSpeed)
                     .withRotationalRate(anglock * 0.25)
@@ -180,7 +179,7 @@ public class Commands {
         return new SequentialCommandGroup(
             new InstantCommand(() -> LimelightHelpers.setPipelineIndex(limelight, usingPipeline)),
             drivetrain.applyRequest(() ->
-                robotCentricDrive
+                drive
                     .withVelocityX(ForwardSpeed)
                     .withVelocityY(-RightSpeed)
                     .withRotationalRate(AngularSpeed)

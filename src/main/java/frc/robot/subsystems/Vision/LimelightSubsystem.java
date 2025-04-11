@@ -5,13 +5,10 @@ package frc.robot.subsystems.Vision;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.Kinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.robot.RobotContainer;
 import frc.robot.LimelightHelpers.PoseEstimate;
@@ -67,12 +64,14 @@ public class LimelightSubsystem implements Subsystem {
     
 
 
-    @SuppressWarnings("unchecked")
+
 
     
 
     //this should be called all the time, and should also be tuned for the modules 
     public void updatePose()
+    //this entire method just allows for the odometry to sync with the limelight position
+    //and use both odomometry and sight for posing the robot.
     {
         estimatePose.update(
             RobotContainer.drivetrain.getPigeon2().getRotation2d(),
@@ -131,18 +130,18 @@ public class LimelightSubsystem implements Subsystem {
         }
     }
 
-    public void getTrueLastTag()
-    {
-        if(LimelightHelpers.getTV(Constants.limeLightOneName))
-        {
-            isChanging = true;
-            trueLastTag = LimelightHelpers.getFiducialID(curLimelight());
-        } else
-        {
-            isChanging = false;
-            trueLastTag = trueLastTag; 
-        }
-    }
+    // public void getTrueLastTag()
+    // {
+    //     if(LimelightHelpers.getTV(Constants.limeLightOneName))
+    //     {
+    //         isChanging = true;
+    //         trueLastTag = LimelightHelpers.getFiducialID(curLimelight());
+    //     } else
+    //     {
+    //         isChanging = false;
+    //         trueLastTag = trueLastTag; 
+    //     }
+    // }
     
 
     // public Rotation2d GetIdRotation()
@@ -205,9 +204,9 @@ public class LimelightSubsystem implements Subsystem {
     }
 
 
-    int[] reefTags = {6, 7, 8, 9, 10, 11, 17, 18, 19, 20, 21, 22};
-     int[] intakeTags = {1, 2, 12, 13};
-    public boolean LookingAtReef; 
+    // int[] reefTags = {6, 7, 8, 9, 10, 11, 17, 18, 19, 20, 21, 22};
+    //  int[] intakeTags = {1, 2, 12, 13};
+    // public boolean LookingAtReef; 
     // public void IsLookingAtReef()
     // {
     //     for(int i = 0; i <= reefTags.length; i++)
@@ -229,28 +228,28 @@ public class LimelightSubsystem implements Subsystem {
     
 
     //changes pipelines / offsets based on where the limelight is
-    public int CurPipeline(boolean rightSide)
-    {
-        if(LookingAtReef == true)
-        {
-            if(rightSide == true)
-            {
-                return 2; 
-            } else
-            {
-                return 3;
-            }
-        } else
-        {
-            if(rightSide == true)
-            {
-                return 0;
-            } else
-            {
-                return 1;
-            }
-        } 
-    } //have to get the right pipelines
+    // public int CurPipeline(boolean rightSide)
+    // {
+    //     if(LookingAtReef == true)
+    //     {
+    //         if(rightSide == true)
+    //         {
+    //             return 2; 
+    //         } else
+    //         {
+    //             return 3;
+    //         }
+    //     } else
+    //     {
+    //         if(rightSide == true)
+    //         {
+    //             return 0;
+    //         } else
+    //         {
+    //             return 1;
+    //         }
+    //     } 
+    // } //have to get the right pipelines
 
              
     // public double angLock() {

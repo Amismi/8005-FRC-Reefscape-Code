@@ -6,7 +6,6 @@ import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
-import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 
 import com.revrobotics.spark.SparkMax;
@@ -18,8 +17,6 @@ import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
 import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.Robot;
 import frc.robot.RobotContainer;
 import com.revrobotics.spark.config.*;
 
@@ -68,7 +65,10 @@ public class ToolSubsystems {
         //motion magic for elevator encoder pids
         motionMagicConfigs.MotionMagicCruiseVelocity = 150;
         motionMagicConfigs.MotionMagicAcceleration = 225;
-        motionMagicConfigs.MotionMagicJerk = 2750;
+        motionMagicConfigs.MotionMagicJerk = 1800;
+
+        //creating library that has code to let us use the encoder as a position setter, motion max for sparkmax
+        m_motmag.Slot = 0;
         
         //from here on, this is all sparkmax initialization for encoder position setting
         //getting closed loop control aka pid encoder control for pivot.
@@ -77,7 +77,7 @@ public class ToolSubsystems {
         config.closedLoop.feedbackSensor(FeedbackSensor.kPrimaryEncoder)
 
         // Set PID values for position control. We don't need to pass a closed loop
-        // slot, as it will default to slot 0.
+        // slot, as it will default to slot 0. These are pids for pivot
         .p(0.1)
         .i(0)
         .d(0)
@@ -89,8 +89,6 @@ public class ToolSubsystems {
         .velocityFF(1.0 / 5767, ClosedLoopSlot.kSlot1)
         .outputRange(-0.3, .3, ClosedLoopSlot.kSlot1);
             
-        //creating library that has code to let us use the encoder as a position setter, motion max for sparkmax
-        m_motmag.Slot = 0;
         
         //telling motor to give resistance when robot is on and its velocity is at 0
         config.idleMode(IdleMode.kBrake);
@@ -112,7 +110,7 @@ public class ToolSubsystems {
         //apply said configs
         talonFXLiftConfig.apply(liftLimitConfigs);
         talonFXElevatorConfig.apply(limitConfigs);
-        
+         
         //setting configurations on all sparkmax motors
         algealeft.configure(algeaConfig, com.revrobotics.spark.SparkBase.ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
         algearight.configure(algeaConfig, com.revrobotics.spark.SparkBase.ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);

@@ -1,14 +1,10 @@
 package frc.robot.subsystems.Vision;
 
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.networktables.NetworkTable;
-import frc.robot.Constants;
 import frc.robot.LimelightHelpers;
 
 public class Limelight extends LimelightSubsystem{
-    //class to get raw data from the limelight like tx and ty
-
-    public String limelightName;
+    String limelightName;
 
     public Limelight(String name)
     {
@@ -24,7 +20,7 @@ public class Limelight extends LimelightSubsystem{
 
     public double getTY()
     {
-        return table.getEntry("ty").getDouble(0);
+        return table.getEntry("tx").getDouble(0);
     }
     
     public boolean getTV()
@@ -37,12 +33,12 @@ public class Limelight extends LimelightSubsystem{
         return LimelightHelpers.pose3dToArray(LimelightHelpers.getTargetPose3d_CameraSpace(limelightName))[4];
     }
 
-    public double TXWithDeadband()
+    public double txWithDeadband()
     {
         return applyDeadband(0.05, getTX());
     }
 
-    public double TYWithDeadband()
+    public double tyWithDeadband()
     {
         return applyDeadband(.05, getTY());
     }
@@ -52,9 +48,7 @@ public class Limelight extends LimelightSubsystem{
         return applyDeadband(.05, AngleDeadband());
     }
 
-    public void SwitchLimelightPipeline(int pipeline)
-    {
-        LimelightHelpers.setPipelineIndex(limelightName, pipeline);
-    }
+
+    
     
 }

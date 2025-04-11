@@ -16,12 +16,10 @@ import com.ctre.phoenix6.swerve.SwerveRequest;
 import com.pathplanner.lib.auto.AutoBuilder;
 
 
-import edu.wpi.first.units.measure.Time;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -53,17 +51,33 @@ public class RobotContainer {
     
     
     //speed variables
-    public static double MaxBaseSpeed = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
-    private double MaxAngularRate = RotationsPerSecond.of(0.75).in(RadiansPerSecond); // 3/4 of a rotation per second max angular velocity
-    private double speedVar = 1; //variable to control the percentage of max speed the robot goes, currently at max
-    private double speedAngleVar = .70; //same thing as last but for rotating speed
-    public static double MaxSpeed = MaxBaseSpeed; //variable to switch to negative if on red side and controls are flipped
-    private double limelightMaxSpeed = 0.007; //percentage of speed drivetrain goes aligning, low so the robot doesn't oscilate since tx can get high
-    public static double baseautoLineUpSpeed = 0.1; //max speed to go when the robot goes forward during aligning in auto
-    public static double autoLineUpSpeed = baseautoLineUpSpeed; //used to flip speed to negative if on red side and sides are flipped
+    public static double MaxBaseSpeed = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); 
+    // kSpeedAt12Volts desired top speed
+    
+    public static double MaxAngularRate = RotationsPerSecond.of(0.75).in(RadiansPerSecond); 
+    // 3/4 of a rotation per second max angular velocity
+    
+    private double speedVar = 1;
+    //variable to control the percentage of max speed the robot goes, currently at max
+    private double speedAngleVar = .70; 
+    //same thing as last but for rotating speed
+
+    public static double MaxSpeed = MaxBaseSpeed;
+     //variable to switch to negative if on red side and controls are flipped
+
+    private double limelightMaxSpeed = 0.007; 
+    //percentage of speed drivetrain goes aligning, low so the robot doesn't oscilate since tx can get high
+
+    public static double baseautoLineUpSpeed = 0.1; 
+    //max speed to go when the robot goes forward during aligning in auto
+
+    public static double autoLineUpSpeed = baseautoLineUpSpeed;
+     //used to flip speed to negative if on red side and sides are flipped
+
     private double joystickForwardSpeed = 0; //variables that 
     private double joystickStrafeSpeed = 0;
     private double joystickAngleSpeed = 0;
+    
     
 
     //intializing the controllers to use
@@ -115,6 +129,7 @@ public class RobotContainer {
         joystickStrafeSpeed = -joystick.getLeftX() * MaxSpeed * -speedVar;
         joystickAngleSpeed = -joystick.getRightX() * MaxAngularRate * speedAngleVar;
         //speeds that the drivetrain runs based on joystick and what we want max speed to be
+
          
         m_ToolSubsystems.SetConfig();
       
